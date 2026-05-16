@@ -1,8 +1,0 @@
-torch
-torchvision
-transformers
-datasets
-scikit-learn
-wandb
-tqdm
-pillow
