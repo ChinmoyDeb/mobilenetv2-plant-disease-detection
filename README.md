@@ -252,38 +252,132 @@ Tracked using Weights & Biases:
 
 # 🚀 Installation
 
-```bash
-git clone https://github.com/ChinmoyDeb/mobilenetv2-plant-disease-detection.git
-cd mobilenetv2-plant-disease-detection
+## Google Colab Setup (T4 GPU)
+
+```python id="m7q2x5"
+# Install dependencies
+!pip install -q transformers datasets wandb scikit-learn
 ```
 
-```bash
-pip install -r requirements.txt
+```python id="x4n8p1"
+# Login to Weights & Biases (optional)
+import wandb
+wandb.login()
 ```
 
----
+```python id="k8m3q1"
+# Verify GPU availability
+import torch
+
+print(f"GPU Available: {torch.cuda.is_available()}")
+print(f"GPU Name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'None'}")
+```
 
 # 💻 Usage
 
-```python
+## Model Loading
+
+```python id="u2q8dn"
 from transformers import MobileNetV2ForImageClassification
 
+# Load pretrained model
 model = MobileNetV2ForImageClassification.from_pretrained(
     "linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification"
-)
+).to('cuda')
 ```
 
 ---
 
+## Inference Example
+
+```python id="h5v1ls"
+from transformers import AutoImageProcessor
+from PIL import Image
+
+# Load processor and image
+processor = AutoImageProcessor.from_pretrained(
+    "linkanjarad/mobilenet_v2_1.0_224-plant-disease-identification"
+)
+
+image = Image.open("plant_leaf.jpg")
+
+# Preprocess and predict
+inputs = processor(
+    images=image,
+    return_tensors="pt"
+).to('cuda')
+
+outputs = model(**inputs)
+
+predictions = outputs.logits.argmax(-1)
+
+print(f"Predicted class: {predictions.item()}")
+```
+
 # 🔍 Key Findings
 
-* Progressive fine-tuning significantly improved feature adaptation
-* BatchNorm freezing stabilized transfer learning
-* Data augmentation improved generalization performance
-* Domain adaptation from PlantVillage → PlantDoc was successful
-* Real-world agricultural image classification remains highly challenging
+## Two-Phase Transfer Learning
+
+Implemented a MobileNetV2 transfer learning pipeline for real-world plant disease classification using the PlantDoc dataset.
+
+### Phase 1 — Frozen Backbone Training
+
+* Freeze MobileNetV2 backbone
+* Train custom classifier head only
+* Keep BatchNorm layers fixed in eval mode
+* AdamW optimizer with warmup scheduling
+
+### Result
+
+* Validation Accuracy: **43.1%**
 
 ---
+
+### Phase 2 — Progressive Fine-Tuning
+
+* Unfreeze final 3 MobileNetV2 blocks
+* Fine-tune deeper feature representations
+* Maintain frozen BatchNorm statistics
+* Cosine Annealing scheduler
+
+### Result
+
+* Best Validation Accuracy: **53.7%**
+* Final Test Accuracy: **45.76%**
+* Weighted F1 Score: **43.74%**
+
+---
+
+## Domain Adaptation Challenge
+
+PlantVillage contains clean laboratory images while PlantDoc contains:
+
+* varying lighting conditions
+* cluttered backgrounds
+* blur and camera noise
+* inconsistent image quality
+* real-world agricultural field conditions
+
+---
+
+## Key Training Improvements
+
+* Custom 3-layer classifier head improved feature adaptation
+* Progressive unfreezing stabilized transfer learning
+* Data augmentation improved generalization performance
+* Fixed BatchNorm prevented pretrained feature drift
+* Cosine scheduling improved Phase 2 fine-tuning stability
+
+---
+
+## Technical Highlights
+
+* 28-class multi-class classification pipeline
+* HuggingFace Transformers + PyTorch implementation
+* GPU training on Google Colab T4
+* Experiment tracking using Weights & Biases
+* Transfer learning with MobileNetV2
+* Real-world agricultural computer vision application
 
 # 👨‍💻 Developer
 
