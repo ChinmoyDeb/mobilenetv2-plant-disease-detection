@@ -16,7 +16,6 @@ This project reproduces and improves a two-phase transfer learning pipeline for 
 * [Results](#-results)
 * [Performance Analysis](#-performance-analysis)
 * [Training Visualizations](#-training-visualizations)
-* [Recruiter Highlights](#-recruiter-highlights)
 * [Experiment Tracking](#-experiment-tracking)
 * [Technologies Used](#️-technologies-used)
 * [Installation](#-installation)
@@ -213,18 +212,6 @@ Evaluate on PlantDoc
 
 ---
 
-# 🚀 Recruiter Highlights
-
-* Implemented advanced transfer learning pipeline using PyTorch and HuggingFace
-* Reproduced and improved a research-style deep learning workflow
-* Built a progressive fine-tuning strategy for domain adaptation
-* Worked with real-world noisy agricultural image datasets
-* Integrated experiment tracking using Weights & Biases
-* Designed custom classification head for multi-class image classification
-* Achieved 53.7% validation accuracy on challenging PlantDoc dataset
-* Experience with GPU training, optimization, and debugging deep learning systems
-
----
 
 # 📊 Experiment Tracking
 
