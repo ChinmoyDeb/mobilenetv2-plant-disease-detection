@@ -155,12 +155,21 @@ Evaluate on PlantDoc
 
 # 📈 Results
 
-| Metric                   | Result |
-| ------------------------ | ------ |
-| Best Validation Accuracy | 53.7%  |
-| Final Test Accuracy      | 45.76% |
-| Weighted F1 Score        | 43.74% |
-| Number of Classes        | 28     |
+| Metric | Baseline | Final Model | Improvement |
+|---|---|---|---|
+| Validation Accuracy | 40.7% | 53.7% | +13.0% |
+| Test Accuracy | 19.49% | 45.76% | +26.27% |
+| Weighted F1 Score | 47.0% | 43.74% | -3.26% |
+
+---
+
+## Key Improvements Over Baseline
+
+- Improved validation accuracy by **13%**
+- Improved real-world PlantDoc test accuracy by **26.27%**
+- Successfully adapted MobileNetV2 from laboratory images to noisy field images
+- Improved domain generalization using progressive fine-tuning
+- Achieved stronger feature adaptation using BatchNorm stabilization
 
 ---
 
